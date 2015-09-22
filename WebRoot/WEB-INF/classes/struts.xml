@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.serve.static.browserCache" value="false" />
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.locale" value="zh_CN" />
+	<constant name="struts.i18n.encoding" value="utf-8" />
+	<constant name="struts.objectFactory" value="spring" />
+	<constant name="struts.configuration.xml.reload" value="true" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.multipart.maxSize" value="10701096" />
+	<constant name="struts.multipart.saveDir " value="d:/tmp" />
+
+
+	<package name="xxxknight" extends="struts-default">
+
+
+		<action name="index" class="indexAction">
+			<result name="success">/index.jsp</result>
+		</action>
+
+		<action name="saveUser" class="saveUserAction">
+			<result name="success" type="redirect">listUser.action</result>
+		</action>
+		<action name="listUser" class="listUserAction">
+			<result name="success">/list.jsp</result>
+		</action>
+		<action name="deleteUser" class="removeUserAction">
+			<result name="success" type="redirect">listUser.action</result>
+		</action>
+		<action name="updatePUser" class="updatePUserAction">
+			<result name="success">/update.jsp</result>
+		</action>
+		<action name="updateUser" class="updateUserAction">
+			<result name="success" type="redirect">listUser.action</result>
+		</action>
+
+
+		<action name="indexBug" class="bugAction">
+			<result name="success">/bugSubmit.jsp</result>
+		</action>
+		<action name="updateBug" class="bugAction" method="updateBug">
+			<result name="success" type="redirect">/bugSubmit.jsp</result>
+		</action>
+		<action name="saveBug" class="bugAction" method="saveBug">
+			<result name="success" type="redirect">/bugSubmit.jsp</result>
+		</action>
+		<action name="listBug" class="bugAction" method="listBug">
+			<result name="success">/bugSubmit.jsp</result>
+		</action>
+		<action name="deleteBug" class="bugAction" method="deleteBug">
+			<result name="success" type="redirect">/bugSubmit.jsp</result>
+		</action>
+
+		<action name="indexArrange" class="arrangeAction">
+			<result name="success">/arrange.jsp</result>
+		</action>
+		<action name="updateArrange" class="arrangeAction" method="updateArrange">
+			<result name="success" type="redirect">/arrange.jsp</result>
+		</action>
+		<action name="saveArrange" class="arrangeAction" method="saveArrange">
+			<result name="success" type="redirect">/arrange.jsp</result>
+		</action>
+		<action name="listArrange" class="arrangeAction" method="listArrange">
+			<result name="success">/arrange.jsp</result>
+		</action>
+		<action name="deleteArrange" class="arrangeAction" method="deleteArrange">
+			<result name="success" type="redirect">/arrange.jsp</result>
+		</action>
+
+
+		<action name="indexMatter" class="matterAction">
+			<result name="success">/matter.jsp</result>
+		</action>
+		<action name="updateMatter" class="matterAction" method="updateMatter">
+			<result name="success" type="redirect">/matter.jsp</result>
+		</action>
+		<action name="saveMatter" class="matterAction" method="saveMatter">
+			<result name="success" type="redirect">/matter.jsp</result>
+		</action>
+		<action name="listMatter" class="matterAction" method="listMatter">
+			<result name="success">/matter.jsp</result>
+		</action>
+		<action name="deleteMatter" class="matterAction" method="deleteMatter">
+			<result name="success" type="redirect">/matter.jsp</result>
+		</action>
+
+
+
+
+		<action name="indexMachine" class="machineAction">
+			<result name="success">/machine.jsp</result>
+		</action>
+		<action name="listMachine" class="machineAction" method="listMachine">
+			<result name="success">/machine.jsp</result>
+		</action>
+		<action name="updateMachine" class="machineAction" method="updateMachine">
+			<result name="success" type="redirect">/machine.jsp</result>
+		</action>
+		<action name="saveMachine" class="machineAction" method="saveMachine">
+			<result name="success" type="redirect">/machine.jsp</result>
+		</action>
+		<action name="deleteMachine" class="machineAction" method="deleteMachine">
+			<result name="success" type="redirect">/machine.jsp</result>
+		</action>
+
+		<action name="statsTravel" class="statsAction" method="statsTravel">
+		</action>
+
+		<action name="travel" class="statsAction" method="travel">
+			<result name="success">/statsTravel.jsp</result>
+		</action>
+
+		<!-- 配置处理文件上传的Action -->
+		<action name="upload" class="documentAction" method="upload">
+			<param name="savePath">/uploadFiles</param>
+			<result name="success" type="redirect">/fileUpload.jsp</result>
+			<result name="error">/fileError.jsp</result>
+		</action>
+
+		<action name="download" class="documentDownloadAction" method="download">
+		</action>
+
+		<action name="listDocument" class="documentAction" method="listDocument">
+		</action>
+
+		<action name="doTransfer" class="amAction">
+			<!-- 定义处理结果和资源之间的映射关系 -->
+			<result name="error1">error1.jsp</result>
+			<result name="success1">success1.jsp</result>
+		</action>
+
+	</package>
+
+	<package name="admin" extends="struts-default">
+	
+	    <action name="loginAction" class="loginAction">
+	          <result name="success" type="redirect">/admin/index.jsp</result>
+	          <result name="error">/login.jsp</result>
+		</action>
+	
+		<action name="updateArticle" class="articleAction" method="updateArticle">
+		</action>
+
+		<action name="meetingArticle" class="articleAction" method="meetingArticle">
+			<result name="success">/meeting.jsp</result>
+		</action>
+	</package>
+
+
+
+
+
+
+
+
+
+</struts>

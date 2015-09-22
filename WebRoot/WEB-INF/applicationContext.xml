@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-3.0.xsd 
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	<!-- 定义BasicDataSource数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<!-- 指定连接数据库的JDBC驱动 -->
+		<property name="driverClassName" value="com.mysql.jdbc.Driver">
+		</property>
+		<!-- 指定数据库所用的url-->
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/pris?useUnicode=true&amp;characterEncoding=UTF-8">
+		</property>
+		<!-- 指定连接数据库的用户名 -->
+		<property name="username" value="root"></property>
+		<!-- 指定连接数据库的密码 -->
+		<property name="password" value=""></property>
+	</bean>
+
+	<!-- 定义Hibernate的SessionFactory -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<!--
+			将上面定义的数据源dataSource注入到LocalSessionFactoryBean类的sessionFactory属性
+		-->
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<!-- 设置Hibernate的相关属性 -->
+		<property name="hibernateProperties">
+			<props>
+				<!-- 设置Hibernate的数据库方言 -->
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">
+					true
+				</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>com/test/bean/User.hbm.xml</value>
+				<value>com/test/bean/Account.hbm.xml</value>
+				<value>com/test/bean/Bug.hbm.xml</value>
+				<value>com/test/bean/Machine.hbm.xml</value>
+				<value>com/test/bean/Statstravel.hbm.xml</value>
+				<value>com/test/bean/Document.hbm.xml</value>
+				<value>com/test/bean/Arrange.hbm.xml</value>
+				<value>com/test/bean/Matter.hbm.xml</value>
+				<value>com/test/bean/Article.hbm.xml</value>
+				<value>com/test/bean/Person.hbm.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 声明事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="UserDao" class="com.test.dao.impl.UserDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="userServiceTarget" class="com.test.service.impl.UserServiceImpl">
+		<property name="userDao" ref="UserDao"></property>
+	</bean>
+
+	<bean id="bugDao" class="com.test.dao.impl.BugDAOImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="bugService" class="com.test.service.impl.BugServiceImpl">
+		<property name="bugDao" ref="bugDao"></property>
+	</bean>
+
+
+	<bean id="bugAction" class="com.test.action.bug.BugAction" scope="prototype">
+		<property name="service" ref="bugService" />
+	</bean>
+
+	<bean id="statsDAO" class="com.test.dao.impl.StatsDAOImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean id="statsService" class="com.test.service.impl.StatsServiceImpl">
+		<property name="statsDao" ref="statsDAO" />
+	</bean>
+
+	<bean id="statsAction" class="com.test.action.stats.StatsAction"
+		scope="prototype">
+		<property name="service" ref="statsService" />
+	</bean>
+
+
+	<bean id="machineDao" class="com.test.dao.impl.MachineDAOImpl"
+		scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="machineService" class="com.test.service.impl.MachineServiceImpl">
+		<property name="machineDao" ref="machineDao"></property>
+	</bean>
+
+	<bean id="machineAction" class="com.test.action.machine.MachineAction"
+		scope="prototype">
+		<property name="service" ref="machineService" />
+	</bean>
+
+	<bean id="document" class="com.test.bean.Document" scope="prototype">
+	</bean>
+
+	<bean id="documentDao" class="com.test.dao.impl.DocumentDAOImpl"
+		scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="documentService" class="com.test.service.impl.DocumentServiceImpl">
+		<property name="documentDao" ref="documentDao"></property>
+	</bean>
+
+	<bean id="documentAction" class="com.test.action.document.DocumentAction"
+		scope="prototype">
+		<property name="service" ref="documentService" />
+		<property name="document" ref="document" />
+	</bean>
+
+	<bean id="arrangeDao" class="com.test.dao.impl.ArrangeDAOImpl"
+		scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="arrangeService" class="com.test.service.impl.ArrangeServiceImpl">
+		<property name="arrangeDao" ref="arrangeDao"></property>
+	</bean>
+
+	<bean id="arrangeAction" class="com.test.action.arrange.ArrangeAction"
+		scope="prototype">
+		<property name="service" ref="arrangeService" />
+	</bean>
+
+	<bean id="matterDao" class="com.test.dao.impl.MatterDAOImpl"
+		scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="matterService" class="com.test.service.impl.MatterServiceImpl">
+		<property name="matterDao" ref="matterDao"></property>
+	</bean>
+
+	<bean id="matterAction" class="com.test.action.matter.MatterAction"
+		scope="prototype">
+		<property name="service" ref="matterService" />
+	</bean>
+
+	<bean id="userService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="target" ref="userServiceTarget"></property>
+		<property name="transactionManager" ref="transactionManager"></property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="saveUserAction" class="com.test.action.user.SaveUserAction"
+		scope="prototype">
+		<property name="service" ref="userService"></property>
+	</bean>
+
+	<bean id="listUserAction" class="com.test.action.user.ListUserAction"
+		scope="prototype">
+		<property name="service" ref="userService"></property>
+	</bean>
+
+	<bean id="removeUserAction" class="com.test.action.user.RemoveUserAction"
+		scope="prototype">
+		<property name="service" ref="userService"></property>
+	</bean>
+
+	<bean id="updatePUserAction" class="com.test.action.user.UpdatePUserAction"
+		scope="prototype">
+		<property name="service" ref="userService"></property>
+	</bean>
+
+	<bean id="updateUserAction" class="com.test.action.user.UpdateUserAction"
+		scope="prototype">
+		<property name="service" ref="userService"></property>
+	</bean>
+
+	<bean id="indexAction" class="com.test.action.index.IndexAction"
+		scope="prototype">
+		<property name="arrangeService" ref="arrangeService" />
+		<property name="matterService" ref="matterService" />
+	</bean>
+
+	<!--
+		定义AccountDAOImpl类实例，并将已经创建LocalSessionFactoryBean的实例
+		sessionFactory依赖注入到UserDAOImpl类所继承的 HibernateDaoSupport
+		的sessionFactory属性
+	-->
+	<bean id="accountDAO" class="com.test.dao.impl.AccountDAOImpl">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
+	<bean id="accountService" class="com.test.service.impl.AccountServiceImpl">
+		<property name="accountDAO" ref="accountDAO" />
+	</bean>
+
+
+	<!--
+		部署Struts 2的负责账户管理的控制器AccountManager，
+		并给AccountManager类中的accountBiz属性注入值
+	-->
+	<bean id="amAction" class="com.test.action.account.AccountManagerAction"
+		scope="prototype">
+		<property name="accountService" ref="accountService" />
+	</bean>
+
+	<bean id="documentDownloadAction" class="com.test.action.document.DocumentDownloadAction"
+		scope="prototype">
+		<property name="documentService" ref="documentService" />
+	</bean>
+
+	<bean id="articleDao" class="com.test.dao.impl.ArticleDAOImpl"
+		scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="articleService" class="com.test.service.impl.ArticleServiceImpl">
+		<property name="articleDao" ref="articleDao"></property>
+	</bean>
+
+
+	<bean id="articleAction" class="com.test.action.article.ArticleAction"
+		scope="prototype">
+		<property name="service" ref="articleService" />
+	</bean>
+
+	<bean id="personDao" class="com.test.dao.impl.PersonDAOImpl"
+		scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="personService" class="com.test.service.impl.PersonServiceImpl">
+		<property name="personDao" ref="personDao"></property>
+	</bean>
+
+	<bean id="personAction" class="com.test.action.person.PersonAction"
+		scope="prototype">
+		<property name="service" ref="personService" />
+	</bean>
+
+	<bean id="loginAction" class="com.test.action.log.LoginAction"
+		scope="prototype">
+		<property name="logService" ref="logService" />
+	</bean>
+
+	<bean id="logDao" class="com.test.dao.impl.LogDAOImpl"
+		scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="logService" class="com.test.service.impl.LogServiceImpl">
+		<property name="logDao" ref="logDao"></property>
+	</bean>
+
+</beans>
